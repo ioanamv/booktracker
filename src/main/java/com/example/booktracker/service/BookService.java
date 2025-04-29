@@ -5,6 +5,7 @@ import com.example.booktracker.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -23,17 +24,25 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public List<Book> getAllBooks(){
+    public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    public Book getBookById(Long id){
-        return bookRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Book not found"));
+    public Optional<Book> getBookById(Long userId){
+        return bookRepository.findById(userId);
     }
 
-    public Book updateBook(Long id, Book updatedBook){
-        Book book=bookRepository.findById(id).orElseThrow(()->new RuntimeException("Book not found"));
+    public Optional<Book> getBookByUserId(Long bookid, Long userId)
+    {
+        return bookRepository.findByBookIdAndUser_UserId(bookid,userId);
+    }
+
+    public List<Book> getBooksByUserId(Long userId){
+        return bookRepository.findByUser_UserId(userId);
+    }
+
+    public Book updateBook(Long bookId, Book updatedBook){
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new RuntimeException("Book not found"));
 
         book.setTitle(updatedBook.getTitle());
         book.setAuthor(updatedBook.getAuthor());
