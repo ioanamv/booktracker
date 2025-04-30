@@ -32,7 +32,7 @@ public class UserControllerTest {
     @Test
     void createUser_HappyCase() throws Exception {
         User user = new User();
-        user.setId(1L);
+        user.setUserId(1L);
         user.setEmail("user@example.com");
 
         when(userService.createUser(any(User.class))).thenReturn(user);
@@ -41,7 +41,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"email\"}"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.userId").value(1L))
                 .andExpect(jsonPath("$.email").value("user@example.com"));
     }
 
@@ -60,14 +60,14 @@ public class UserControllerTest {
     @Test
     void getUser_HappyCase() throws Exception {
         User user = new User();
-        user.setId(1L);
+        user.setUserId(1L);
         user.setEmail("user@example.com");
 
         when(userService.getUserById(1L)).thenReturn(Optional.of(user));
 
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.userId").value(1L))
                 .andExpect(jsonPath("$.email").value("user@example.com"));
     }
 

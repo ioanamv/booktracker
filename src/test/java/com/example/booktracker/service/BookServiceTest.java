@@ -11,8 +11,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -61,26 +60,28 @@ public class BookServiceTest {
     @Test
     void getBookById_HappyCase(){
         Book book=new Book();
-        book.setId(1L);
+        book.setBookId(1L);
 
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
-        Book found=bookService.getBookById(1L);
-        assertEquals(1L, found.getId());
+        Optional<Book> found=bookService.getBookById(1L);
+        assertTrue(found.isPresent());
+        assertEquals(1L, found.get().getBookId());
     }
 
     @Test
     void findBookById_NotFound(){
         when(bookRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, ()-> bookService.getBookById(1L));
+        Optional<Book> result=bookService.getBookById(1L);
+        assertTrue(result.isEmpty());
     }
 
     //update book
     @Test
     void updateBook_HappyCase(){
         Book existing=new Book();
-        existing.setId(1L);
+        existing.setBookId(1L);
         existing.setTitle("Old title");
 
         Book updateData=new Book();
@@ -103,7 +104,7 @@ public class BookServiceTest {
     @Test
     void deleteBook_HappyCase(){
         Book book=new Book();
-        book.setId(1L);
+        book.setBookId(1L);
 
         when(bookRepository.existsById(1L)).thenReturn(true);
 

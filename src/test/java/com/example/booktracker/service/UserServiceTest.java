@@ -30,13 +30,13 @@ public class UserServiceTest {
     @Test
     void createUser_HappyCase(){
         User user=new User();
-        user.setId(1L);
+        user.setUserId(1L);
         user.setEmail("test@example.com");
 
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         User createdUser=userService.createUser(user);
-        assertEquals(1L, createdUser.getId());
+        assertEquals(1L, createdUser.getUserId());
     }
 
     @Test
@@ -52,13 +52,13 @@ public class UserServiceTest {
     @Test
     void getUserById_HappyCase(){
         User user=new User();
-        user.setId(1L);
+        user.setUserId(1L);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         Optional<User> foundUser=userService.getUserById(1L);
         assertTrue(foundUser.isPresent());
-        assertEquals(1L, foundUser.get().getId());
+        assertEquals(1L, foundUser.get().getUserId());
         verify(userRepository).findById(1L);
     }
 
