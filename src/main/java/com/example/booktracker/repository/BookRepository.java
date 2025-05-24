@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-    Optional<Book> findByBookIdAndUser_UserId(Long bookId, Long userId);
-    List<Book> findByUser_UserId(Long userId);
+    Optional<Book> findByBookIdAndUser_UserId(Long bookId, String userId);
+    List<Book> findByUser_UserId(String userId);
 }

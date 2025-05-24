@@ -28,16 +28,16 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Optional<Book> getBookById(Long userId){
-        return bookRepository.findById(userId);
+    public Optional<Book> getBookById(Long bookId){
+        return bookRepository.findById(bookId);
     }
 
-    public Optional<Book> getBookByUserId(Long bookid, Long userId)
+    public Optional<Book> getBookByUserId(Long bookid, String userId)
     {
         return bookRepository.findByBookIdAndUser_UserId(bookid,userId);
     }
 
-    public List<Book> getBooksByUserId(Long userId){
+    public List<Book> getBooksByUserId(String userId){
         return bookRepository.findByUser_UserId(userId);
     }
 

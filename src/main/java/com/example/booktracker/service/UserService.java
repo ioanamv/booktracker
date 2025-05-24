@@ -19,7 +19,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserById(Long id){
+    public Optional<User> getUserById(String id){
         return userRepository.findById(id);
     }
 
@@ -28,7 +28,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteUser(Long id){
+    public void deleteUser(String id){
         if(!userRepository.existsById(id)){
             throw new RuntimeException("User not found");
         }

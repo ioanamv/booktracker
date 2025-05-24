@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String userId;
 
     private String name;
     private String email;

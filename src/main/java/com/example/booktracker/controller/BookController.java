@@ -25,7 +25,7 @@ public class BookController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<Book> createBookForUser(@RequestBody Book book, @PathVariable Long userId){
+    public ResponseEntity<Book> createBookForUser(@RequestBody Book book, @PathVariable String userId){
         Optional<User> user=userService.getUserById(userId);
 
         if(user.isPresent()){
@@ -38,14 +38,14 @@ public class BookController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Book>> getAllBooks(@PathVariable Long userId){
+    public ResponseEntity<List<Book>> getAllBooks(@PathVariable String userId){
         List<Book> books=bookService.getBooksByUserId(userId);
         if (books.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(books);
     }
 
     @GetMapping("/user/{userId}/book/{bookId}")
-    public ResponseEntity<Book> getBookById(@PathVariable Long userId, @PathVariable Long bookId) {
+    public ResponseEntity<Book> getBookById(@PathVariable String userId, @PathVariable Long bookId) {
         Optional<Book> book=bookService.getBookById(bookId);
 
         if (book.isPresent() && book.get().getUser().getUserId().equals(userId))
@@ -54,7 +54,7 @@ public class BookController {
     }
 
     @PutMapping("/user/{userId}/book/{bookId}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long userId, @PathVariable Long bookId, @RequestBody Book updatedBook){
+    public ResponseEntity<Book> updateBook(@PathVariable String userId, @PathVariable Long bookId, @RequestBody Book updatedBook){
         Optional<Book> existingBook=bookService.getBookById(bookId);
 
         if(existingBook.isPresent() && existingBook.get().getUser().getUserId().equals(userId))
@@ -67,7 +67,7 @@ public class BookController {
     }
 
     @DeleteMapping("/user/{userId}/book/{bookId}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long userId, @PathVariable Long bookId){
+    public ResponseEntity<Void> deleteBook(@PathVariable String userId, @PathVariable Long bookId){
         Optional<Book> book=bookService.getBookByUserId(bookId, userId);
 
         if (book.isPresent() && book.get().getUser().getUserId().equals(userId))
