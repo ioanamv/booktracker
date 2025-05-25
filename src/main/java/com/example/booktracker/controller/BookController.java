@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +25,9 @@ public class BookController {
         this.userService = userService;
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<Book> createBookForUser(@RequestBody Book book, @PathVariable String userId){
+    @PostMapping
+    public ResponseEntity<Book> createBookForUser(@RequestBody Book book, Principal principal){
+        String userId = principal.getName();
         Optional<User> user=userService.getUserById(userId);
 
         if(user.isPresent()){

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,11 +30,12 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
         if (header!=null && header.startsWith("Bearer ")){
             String token=header.replace("Bearer ","");
             try{
-                String decodedToken =firebaseAuthService.verifyToken(token);
+                String userId =firebaseAuthService.verifyToken(token);
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(decodedToken, null, List.of());
+                        new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println("Auth: " + SecurityContextHolder.getContext().getAuthentication());
 
             } catch (FirebaseAuthException e) {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
