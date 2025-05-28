@@ -26,7 +26,7 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBookForUser(@RequestBody Book book, Principal principal){
+    public ResponseEntity<Book> createBookForUser(Principal principal, @RequestBody Book book){
         String userId = principal.getName();
         Optional<User> user=userService.getUserById(userId);
 
@@ -39,15 +39,17 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Book>> getAllBooks(@PathVariable String userId){
+    @GetMapping
+    public ResponseEntity<List<Book>> getAllBooks(Principal principal){
+        String userId = principal.getName();
         List<Book> books=bookService.getBooksByUserId(userId);
         if (books.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(books);
     }
 
-    @GetMapping("/user/{userId}/book/{bookId}")
-    public ResponseEntity<Book> getBookById(@PathVariable String userId, @PathVariable Long bookId) {
+    @GetMapping("/{bookId}")
+    public ResponseEntity<Book> getBookById(Principal principal, @PathVariable Long bookId) {
+        String userId = principal.getName();
         Optional<Book> book=bookService.getBookById(bookId);
 
         if (book.isPresent() && book.get().getUser().getUserId().equals(userId))
@@ -55,8 +57,9 @@ public class BookController {
         else return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/user/{userId}/book/{bookId}")
-    public ResponseEntity<Book> updateBook(@PathVariable String userId, @PathVariable Long bookId, @RequestBody Book updatedBook){
+    @PutMapping("/{bookId}")
+    public ResponseEntity<Book> updateBook(Principal principal, @PathVariable Long bookId, @RequestBody Book updatedBook){
+        String userId = principal.getName();
         Optional<Book> existingBook=bookService.getBookById(bookId);
 
         if(existingBook.isPresent() && existingBook.get().getUser().getUserId().equals(userId))
@@ -68,8 +71,9 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @DeleteMapping("/user/{userId}/book/{bookId}")
-    public ResponseEntity<Void> deleteBook(@PathVariable String userId, @PathVariable Long bookId){
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<Void> deleteBook(Principal principal, @PathVariable Long bookId){
+        String userId = principal.getName();
         Optional<Book> book=bookService.getBookByUserId(bookId, userId);
 
         if (book.isPresent() && book.get().getUser().getUserId().equals(userId))
